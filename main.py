@@ -18,9 +18,60 @@ def checkdatatype(datatype):
 st.set_page_config(page_title="Ferdy Streamlit", page_icon=None, layout="centered", initial_sidebar_state="auto", menu_items=None)
 
 # set the title of page
-st.write("""
-# Generate Query Insert MySQL
+st.title("""
+Generate Query Insert MySQL
 """)
+
+st.sidebar.markdown("""
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <p style='text-align: center;' class="author">CREATED BY FERDYHAPE</p>
+    <p style='text-align: center;'>Connect with me!</p>
+    <div class="group-icon" style="text-align: center; font-size: 35px">
+        <a href="https://github.com/ferdyhape"><i class="fa-brands fa-github"></i></a>
+        <a href="https://instagram.com/ferdyhape"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/in/ferdy-hahan-pradana/"><i class="fa-brands fa-linkedin"></i></a>
+    </div>
+    <style>
+    .group-icon {
+        margin-top: 20px;
+        padding: 5px 5px;
+        border-radius: 25px;
+        background-color: #F6F6F6;
+    } 
+    .group-icon:hover {
+        background-color: #F9F9F9;
+    }
+    .fa-github {
+        color: #333;
+    }
+    .fa-instagram {
+        color: #833AB4;
+    }
+    .fa-linkedin {
+        color: #0e76a8;
+    }
+    .author {
+        margin: 0px 10px;;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    p {
+        margin: 0px 10px;;
+    }
+    a {
+        margin: 0 10px;
+    }
+    </style>
+</body>
+
+""", unsafe_allow_html=True)
 
 #initiate and refresh the list 
 atribute_datatype_list = []
