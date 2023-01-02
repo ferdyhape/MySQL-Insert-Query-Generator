@@ -1,0 +1,3 @@
+streamlit # pip install streamlit
+pylightxl # pip install pylightxl
+pandas # pip install pandas
