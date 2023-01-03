@@ -7,10 +7,37 @@ This script is made to make it easier to make insert queries in MySQL
 before using, make sure you have installed the requirements attached to the requirements.txt
 
 ## :syringe: How to use this tool?
-after download requirement You have to move to the script storage directory, follow the run command as below in the terminal
-```shell
-streamlit run main.py
-```
+1. Open terminal, Download streamlit
+
+   ```shell
+   pip install streamlit
+   ```
+2. Download pylightxl
+
+   ```shell
+   pip install pylightxl
+   ```
+3. Download pandas
+
+   ```shell
+   pip install pandas
+   ```
+4. Move to the script storage directory
+
+   ```shell
+   cd path\sub-path\MySQL-Insert-Generator
+   ```
+5. In terminal, Run Streamlit Project
+
+   ```shell
+   streamlit run main.py
+   ```
+6. Click Local URL in terminal<br><br>
+   ![image](https://user-images.githubusercontent.com/75787853/210348875-9727f633-5473-4f24-863f-5fad08f22301.png)
+
+7. Last, you must follow the instructions on web<br>
+
+
 ## :gear: Technology Used:
 
  - Python 3.11
