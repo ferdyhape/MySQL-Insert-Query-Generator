@@ -25,7 +25,7 @@ st.set_page_config(
 
 # set the title of page
 st.title("""
-Generate Query Insert MySQL
+[Insert Query Mysql] Generator
 """)
 
 # sidebar for author introduction
