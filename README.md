@@ -4,8 +4,9 @@
 This script is made to make it easier to make insert queries in MySQL
 
 ## :pushpin: Noted!
-before using, make sure you have installed the requirements attached to the requirements.txt
-
+  - **ONLY accept source from excel file(*.xlsx)**
+  - before using, make sure you have installed the requirements attached to the requirements.txt
+  - tested In Windows 10
 ## :syringe: How to use this tool?
 1. Download python, you can download [here](https://www.python.org/downloads/)
 2. Open terminal, Download streamlit
