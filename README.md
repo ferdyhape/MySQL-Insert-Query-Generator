@@ -1,5 +1,5 @@
 
-# MySQL Insert Generator
+# MySQL Insert Query Generator
 ## :open_book: Description
 This script is made to make it easier to make insert queries in MySQL
 
