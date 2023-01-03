@@ -2,19 +2,6 @@ import streamlit as st
 import pandas as pd
 import pylightxl as xl
 
-# initiatie check datatype function
-def checkdatatype(datatype):
-    if datatype.lower() == "int":
-        return("integer")
-    elif datatype.lower() == "str":
-        return("string")
-    elif datatype.lower() == "date":
-        return("date")
-    elif datatype.lower() == "char":
-        return("char")
-    else:
-        return(datatype+" is not datatpye")
-
 # set page config
 st.set_page_config(
     page_title="MySQL Generator | FERDYHAPE", 
@@ -46,7 +33,7 @@ st.sidebar.markdown("""
         <a href="https://github.com/ferdyhape" target="_blank"><i class="fa-brands fa-github"></i></a>
         <a href="https://instagram.com/ferdyhape" target="_blank"><i class="fa-brands fa-instagram"></i></a>
         <a href="https://www.linkedin.com/in/ferdy-hahan-pradana/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
-    </div>
+    </div> 
     <footer>
         <p class="copyright">©2023<br> Copyright By <a href="https://github.com/ferdyhape">FERDYHAPE</a></p>
     </footer>
@@ -118,6 +105,20 @@ st.sidebar.markdown("""
 
 """, unsafe_allow_html=True)
 
+#initiate for datetype input function
+if 'datatype' not in st.session_state:
+    st.session_state.datatype = ""
+def int_selected():
+    st.session_state.datatype += "Int, "
+def string_selected():
+    st.session_state.datatype += "Str, "
+def date_selected():
+    st.session_state.datatype += "Date, "
+def char_selected():
+    st.session_state.datatype += "Char, "
+def reset():
+    st.session_state.datatype = ""
+
 #initiate and refresh the list 
 atribute_datatype_list = []
 atribute_datatype_list.clear()
@@ -131,7 +132,24 @@ atribute_datatype_list.clear()
 # list of input
 table_name = st.text_input("Input table name ")
 input_atribute_name = st.text_input("Enter the Name of attribute sequentially (separated by comma, ex: id, name, address) ")
-input_atribute_datatype = st.text_input("Enter the data type of attribute sequentially (separated by comma, ex: int, str, str) ")
+input_atribute_datatype = st.text_input('Enter the data type of attribute sequentially (click the button below to enter)', st.session_state.datatype)
+col1, col2, col3, col4, col5 = st.columns(5, gap='small')
+
+with col1:
+    st.button('String', on_click=string_selected, key="Str")
+
+with col2:
+    st.button('Integer', on_click=int_selected, key="Int")
+
+with col3:
+    st.button('Date', on_click=date_selected, key="Date")
+
+with col4:
+    st.button('Char', on_click=char_selected, key="Char")
+
+with col5:
+    st.button('Reset', on_click=reset, key="reset")
+
 input_column_address = st.text_input("Enter the address of the value column sequentially (separated by comma, ex: A, B, C) ")
 sheet_name = st.text_input("Sheet name ")
 range_rows = st.number_input("Range rows until ", 0)
@@ -150,6 +168,7 @@ atribute_name_list = input_atribute_name.split(",")
 # process for input attribute data type in list variable
 input_atribute_datatype = input_atribute_datatype.replace(" ", "")
 atribute_datatype_list = input_atribute_datatype.split(",")
+atribute_datatype_list.pop()
 
 # variable for spesific attribute name table
 name_for_query = ', '.join(atribute_name_list)
@@ -169,62 +188,64 @@ dump_address_list = []
 
 # if generate_btn button clicked
 if generate_btn:
-    st.success("Okay, it's in progress. Wait until the query appears!")
+
+    # displays loading spinner
+    with st.spinner('Wait for it...'):
     
     # read the excel file that has been uploaded
-    excel_file = xl.readxl(excel_uploader)
+        excel_file = xl.readxl(excel_uploader)
 
-    #d isplays a preview of the table
-    d = {'Name': atribute_name_list, 'Datatype': atribute_datatype_list, 'Column Address': column_address_list}
-    df = pd.DataFrame(data=d)
-    st.text("""
-    Table Preview
-    """)
-    st.table(df)
+        #d isplays a preview of the table
+        d = {'Name': atribute_name_list, 'Datatype': atribute_datatype_list, 'Column Address': column_address_list}
+        df = pd.DataFrame(data=d)
+        st.text("""
+        Table Preview
+        """)
+        st.table(df)
 
-    #querycontent is a list that contains the value to be inserted per row
-    querycontent = []
+        #querycontent is a list that contains the value to be inserted per row
+        querycontent = []
 
-    # For level 1 is used to retrieve the overall value from the Excel file that has been uploaded by row
+        # For level 1 is used to retrieve the overall value from the Excel file that has been uploaded by row
 
-    # [i] is used to process row addresses in excel files
-    for i in range (start_row, range_rows+1):
+        # [i] is used to process row addresses in excel files
+        for i in range (start_row, range_rows+1):
 
-        # [j] is used to process column addresses in excel files
-        j = 0
-        dump_address_list.clear()
+            # [j] is used to process column addresses in excel files
+            j = 0
+            dump_address_list.clear()
 
-        #For level 2 is used to retrieve the overall value from the Excel file that has been uploaded based on the column
-        for col_address in column_address_list:
+            #For level 2 is used to retrieve the overall value from the Excel file that has been uploaded based on the column
+            for col_address in column_address_list:
 
-            # the process of taking the value and put it in the variable "value"
-            dump = column_address_list[j]+str(row_addr)
-            value = str(excel_file.ws(ws=sheet_name).address(address=dump))
-            
-            # the process of checking whether the value is numeric, and then entering the dump_address_list list
-            if value.isdigit():
-                dump_address_list.append(value)
-            else:
-                dump_address_list.append(f'"{value}"')
-            
-            # j increment for move right column
-            j+=1
+                # the process of taking the value and put it in the variable "value"
+                dump = column_address_list[j]+str(row_addr)
+                value = str(excel_file.ws(ws=sheet_name).address(address=dump))
+                
+                # the process of checking whether the value is numeric, and then entering the dump_address_list list
+                if value.isdigit():
+                    dump_address_list.append(value)
+                else:
+                    dump_address_list.append(f'"{value}"')
+                
+                # j increment for move right column
+                j+=1
 
-        # merge of value in one row, then entering querycontent list 
-        query = ', '.join(dump_address_list)
-        querycontent.append(f"({query})")
+            # merge of value in one row, then entering querycontent list 
+            query = ', '.join(dump_address_list)
+            querycontent.append(f"({query})")
 
-        # row_addr increment for move bottom row
-        row_addr+=1
-    
-    # final_query is the final of all that has been set to display format to the user
-    final_query = ',\n'.join(querycontent)
-    
-    #displays queries
-    st.text("""
-    Query
-    """)
-    st.markdown(f"""
-    ```shell
-    INSERT INTO {table_name} ({name_for_query}) \nVALUES \n{final_query};
-    """)
+            # row_addr increment for move bottom row
+            row_addr+=1
+        
+        # final_query is the final of all that has been set to display format to the user
+        final_query = ',\n'.join(querycontent)
+        
+        #displays queries
+        st.text("""
+        Query
+        """)
+        st.markdown(f"""
+        ```shell
+        INSERT INTO {table_name} ({name_for_query}) \nVALUES \n{final_query};
+        """)
