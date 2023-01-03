@@ -169,6 +169,7 @@ dump_address_list = []
 
 # if generate_btn button clicked
 if generate_btn:
+    st.success("Okay, it's in progress. Wait until the query appears!")
     
     # read the excel file that has been uploaded
     excel_file = xl.readxl(excel_uploader)
