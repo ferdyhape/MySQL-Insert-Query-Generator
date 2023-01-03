@@ -31,22 +31,35 @@ st.sidebar.markdown("""
 </head>
 
 <body>
-    <p style='text-align: center;' class="author">CREATED BY FERDYHAPE</p>
-    <p style='text-align: center;'>Connect with me!</p>
-    <div class="group-icon" style="text-align: center; font-size: 35px">
-        <a href="https://github.com/ferdyhape"><i class="fa-brands fa-github"></i></a>
-        <a href="https://instagram.com/ferdyhape"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://www.linkedin.com/in/ferdy-hahan-pradana/"><i class="fa-brands fa-linkedin"></i></a>
+    <div class="profile_picture">
+        <img src="https://github.com/ferdyhape.png" alt="Profile_Picture" srcset="">
     </div>
+    <p class ="html" style='text-align: center;'>Connect with me!</p>
+    <div class="group-icon" style="text-align: center; font-size: 35px">
+        <a href="https://github.com/ferdyhape" target="_blank"><i class="fa-brands fa-github"></i></a>
+        <a href="https://instagram.com/ferdyhape" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.linkedin.com/in/ferdy-hahan-pradana/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+    </div>
+    <footer>
+        <p class="copyright">©2023<br> Copyright By <a href="https://github.com/ferdyhape">FERDYHAPE</a></p>
+    </footer>
     <style>
+    .profile_picture {
+        text-align:center;
+    }
+    .profile_picture img{
+      border-radius: 50%;
+      width: 65%;
+    }
     .group-icon {
-        margin-top: 20px;
-        padding: 5px 5px;
+        margin: 10px 20px;
+        padding: 0;
         border-radius: 25px;
         background-color: #F6F6F6;
     } 
     .group-icon:hover {
         background-color: #F9F9F9;
+        cursor: pointer;
     }
     .fa-github {
         color: #333;
@@ -62,10 +75,33 @@ st.sidebar.markdown("""
         font-size: 20px;
         font-weight: bold;
     }
-    p {
-        margin: 0px 10px;;
+    .html {
+        margin: 10px 10px;
+        padding: 0;
+    }
+    footer {
+        position: static;
+        height: 270px;
+        width: 100%;
+    }
+    .copyright{
+        position: absolute;
+        width: 100%;
+        color: #fff;
+        line-height: 20px;
+        font-size: 1em;
+        text-align: center;
+        bottom:0;
+    }
+    .copyright a {
+        margin: 0;
+        text-decoration: none;
+    }
+    footer p {
+        margin: 0;
     }
     a {
+        font-weight: bolder;
         margin: 0 10px;
     }
     </style>
@@ -85,14 +121,18 @@ atribute_name_list.clear()
 
 atribute_datatype_list = []
 atribute_datatype_list.clear()
+dataype_list = ['int', 'str', 'date', 'char']
 
 # list of input
-table_name = st.text_input("Input table name: ")
-input_atribute_name = st.text_input("Enter the Name of attribute sequentially (separated by comma): ")
-input_atribute_datatype = st.text_input("Enter the data type of attribute sequentially (separated by comma): ")
-input_column_address = st.text_input("Enter the address of the value column sequentially (separated by comma): ")
-sheet_name = st.text_input("Sheet name: ")
-range_rows = st.number_input("Range rows until: ", 0)
+table_name = st.text_input("Input table name ")
+input_atribute_name = st.text_input("Enter the Name of attribute sequentially (separated by comma, ex: id, name, address) ")
+input_atribute_datatype = st.text_input("Enter the data type of attribute sequentially (separated by comma, ex: int, str, str) ")
+# input_atribute_datatype = st.multiselect(
+#     'Enter the data type of attribute sequentially', dataype_list
+#     )
+input_column_address = st.text_input("Enter the address of the value column sequentially (separated by comma, ex: A, B, C) ")
+sheet_name = st.text_input("Sheet name ")
+range_rows = st.number_input("Range rows until ", 0)
 excel_uploader = st.file_uploader("Upload Excel Source", 'xlsx')
 first_row_header = st.checkbox("First Row is Header")
 
@@ -119,15 +159,15 @@ if first_row_header:
     start_row = 1
     row_addr = 2
 
-#create generate button
-generate = st.button("Generate")
+#create generate_btn button
 
+generate_btn = st.button("Generate")
 
 dump_address_list = []
 
-# if generate button clicked
-if generate:
-    st.write("""
+# if generate_btn button clicked
+if generate_btn:
+    st.text("""
     Table Structure
     """)
 
@@ -136,18 +176,11 @@ if generate:
     df = pd.DataFrame(data=d)
     st.table(df)
 
-    st.write("""
-    Query
-    """)
-
-    st.text(f"""
-            INSERT INTO {table_name} ({name_for_query}) 
-            VALUES
-            """)
-
+    querycontent = []
     for i in range (start_row, range_rows+1):
         j = 0
         dump_address_list.clear()
+        
         for col_address in column_address_list:
             dump = column_address_list[j]+str(row_addr)
             value = str(excel_file.ws(ws=sheet_name).address(address=dump))
@@ -157,6 +190,16 @@ if generate:
                 dump_address_list.append(f'"{value}"')
             j+=1
         query = ', '.join(dump_address_list)
-        st.text(f"({query}),")
+        querycontent.append(f"({query})")
         row_addr+=1
+        
+    final_query = ',\n'.join(querycontent)
     
+    st.text("""
+    Query
+    """)
+
+    st.markdown(f"""
+    ```shell
+    INSERT INTO {table_name} ({name_for_query}) \nVALUES \n{final_query};
+    """)
