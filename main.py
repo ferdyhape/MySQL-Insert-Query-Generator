@@ -168,11 +168,11 @@ dump_address_list = []
 # if generate_btn button clicked
 if generate_btn:
     st.text("""
-    Table Structure
+    Table Preview
     """)
 
     excel_file = xl.readxl(excel_uploader)
-    d = {'Name': atribute_name_list, 'Datatype': atribute_datatype_list, 'Address Column': column_address_list}
+    d = {'Name': atribute_name_list, 'Datatype': atribute_datatype_list, 'Column Address': column_address_list}
     df = pd.DataFrame(data=d)
     st.table(df)
 
