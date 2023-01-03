@@ -15,7 +15,12 @@ def checkdatatype(datatype):
         return(datatype+" is not datatpye")
 
 # set tab title
-st.set_page_config(page_title="Ferdy Streamlit", page_icon=None, layout="centered", initial_sidebar_state="auto", menu_items=None)
+st.set_page_config(
+    page_title="MySQL Generator | FERDYHAPE", 
+    page_icon=":gear:",
+    layout="centered", 
+    initial_sidebar_state="auto", menu_items=None
+    )
 
 # set the title of page
 st.title("""
@@ -35,7 +40,7 @@ st.sidebar.markdown("""
         <img src="https://github.com/ferdyhape.png" alt="Profile_Picture" srcset="">
     </div>
     <p class ="html" style='text-align: center;'>Connect with me!</p>
-    <div class="group-icon" style="text-align: center; font-size: 35px">
+    <div class="group-icon">
         <a href="https://github.com/ferdyhape" target="_blank"><i class="fa-brands fa-github"></i></a>
         <a href="https://instagram.com/ferdyhape" target="_blank"><i class="fa-brands fa-instagram"></i></a>
         <a href="https://www.linkedin.com/in/ferdy-hahan-pradana/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
@@ -56,6 +61,8 @@ st.sidebar.markdown("""
         padding: 0;
         border-radius: 25px;
         background-color: #F6F6F6;
+        text-align: center;
+        font-size: 25px;
     } 
     .group-icon:hover {
         background-color: #F9F9F9;
@@ -81,7 +88,7 @@ st.sidebar.markdown("""
     }
     footer {
         position: static;
-        height: 270px;
+        height: 280px;
         width: 100%;
     }
     .copyright{
