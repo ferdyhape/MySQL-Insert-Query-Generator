@@ -26,7 +26,7 @@ before using, make sure you have installed the requirements attached to the requ
 5. Move to the script storage directory
 
    ```shell
-   cd path\sub-path\MySQL-Insert-Generator
+   cd [path]\[sub-path]\MySQL-Insert-Generator
    ```
 6. In terminal, Run Streamlit Project
 
