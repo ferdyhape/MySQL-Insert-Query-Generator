@@ -186,66 +186,111 @@ generate_btn = st.button("Generate")
 #dump_address_list is a list to hold value addresses in excel
 dump_address_list = []
 
+def validationInput(valid):
+    if table_name == "":
+        st.error('Input table name!', icon="🚨")
+        valid = False
+        return valid
+
+    elif input_atribute_name == "":
+        st.error('Input attribute name!', icon="🚨")
+        valid = False
+        return valid
+
+    elif input_atribute_datatype == "":
+        st.error('Input Data type!', icon="🚨")
+        valid = False
+        return valid
+
+    elif input_column_address == "":
+        st.error('Input Column Address!', icon="🚨")
+        valid = False
+        return valid
+
+    elif sheet_name == "":
+        st.error('Input Sheet name!', icon="🚨")
+        valid = False
+        return valid
+
+    elif range_rows == "":
+        st.error('Input rang rows!', icon="🚨")
+        valid = False
+        return valid
+
+    elif excel_uploader is None:
+        st.error('Input file source!', icon="🚨")
+        valid = False
+        return valid
+
+    else:
+        valid = True
+        return valid
+
 # if generate_btn button clicked
 if generate_btn:
-
-    # displays loading spinner
-    with st.spinner('Wait for it...'):
     
-    # read the excel file that has been uploaded
-        excel_file = xl.readxl(excel_uploader)
+    valid = False
+    if validationInput(valid) == False:
+        st.write("")
 
-        #d isplays a preview of the table
-        d = {'Name': atribute_name_list, 'Datatype': atribute_datatype_list, 'Column Address': column_address_list}
-        df = pd.DataFrame(data=d)
-        st.text("""
-        Table Preview
-        """)
-        st.table(df)
+    else:
+        # displays loading spinner
+        with st.spinner('Wait for it...'):
 
-        #querycontent is a list that contains the value to be inserted per row
-        querycontent = []
+        # read the excel file that has been uploaded
+            excel_file = xl.readxl(excel_uploader)
 
-        # For level 1 is used to retrieve the overall value from the Excel file that has been uploaded by row
+            #d isplays a preview of the table
+            d = {'Name': atribute_name_list, 'Datatype': atribute_datatype_list, 'Column Address': column_address_list}
+            df = pd.DataFrame(data=d)
+            st.text("""
+            Table Preview
+            """)
+            st.table(df)
 
-        # [i] is used to process row addresses in excel files
-        for i in range (start_row, range_rows+1):
+            #querycontent is a list that contains the value to be inserted per row
+            querycontent = []
 
-            # [j] is used to process column addresses in excel files
-            j = 0
-            dump_address_list.clear()
+            # For level 1 is used to retrieve the overall value from the Excel file that has been uploaded by row
 
-            #For level 2 is used to retrieve the overall value from the Excel file that has been uploaded based on the column
-            for col_address in column_address_list:
+            # [i] is used to process row addresses in excel files
+            for i in range (start_row, range_rows+1):
 
-                # the process of taking the value and put it in the variable "value"
-                dump = column_address_list[j]+str(row_addr)
-                value = str(excel_file.ws(ws=sheet_name).address(address=dump))
-                
-                # the process of checking whether the value is numeric, and then entering the dump_address_list list
-                if value.isdigit():
-                    dump_address_list.append(value)
-                else:
-                    dump_address_list.append(f'"{value}"')
-                
-                # j increment for move right column
-                j+=1
+                # [j] is used to process column addresses in excel files
+                j = 0
+                dump_address_list.clear()
 
-            # merge of value in one row, then entering querycontent list 
-            query = ', '.join(dump_address_list)
-            querycontent.append(f"({query})")
+                #For level 2 is used to retrieve the overall value from the Excel file that has been uploaded based on the column
+                for col_address in column_address_list:
 
-            # row_addr increment for move bottom row
-            row_addr+=1
-        
-        # final_query is the final of all that has been set to display format to the user
-        final_query = ',\n'.join(querycontent)
-        
-        #displays queries
-        st.text("""
-        Query
-        """)
-        st.markdown(f"""
-        ```shell
-        INSERT INTO {table_name} ({name_for_query}) \nVALUES \n{final_query};
-        """)
+                    # the process of taking the value and put it in the variable "value"
+                    dump = column_address_list[j]+str(row_addr)
+                    value = str(excel_file.ws(ws=sheet_name).address(address=dump))
+                    
+                    # the process of checking whether the value is numeric, and then entering the dump_address_list list
+                    if value.isdigit():
+                        dump_address_list.append(value)
+                    else:
+                        dump_address_list.append(f'"{value}"')
+                    
+                    # j increment for move right column
+                    j+=1
+
+                # merge of value in one row, then entering querycontent list 
+                query = ', '.join(dump_address_list)
+                querycontent.append(f"({query})")
+
+                # row_addr increment for move bottom row
+                row_addr+=1
+            
+            # final_query is the final of all that has been set to display format to the user
+            final_query = ',\n'.join(querycontent)
+            
+            #displays queries
+            st.text("""
+            Query
+            """)
+            st.markdown(f"""
+            ```shell
+            INSERT INTO {table_name} ({name_for_query}) \nVALUES \n{final_query};
+            """)
