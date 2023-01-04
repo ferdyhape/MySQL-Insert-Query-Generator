@@ -177,6 +177,7 @@ def generateInsertMySQL():
     # list of input
     table_name = st.text_input("Input table name ")
     input_atribute_name = st.text_input("Enter the Name of attribute sequentially (separated by comma, ex: id, name, address) ")
+    first_row_header = st.checkbox("First Row is Header")
     input_atribute_datatype = st.text_input('Enter the data type of attribute sequentially (click the button below to enter)', st.session_state.datatype)
     col1, col2, col3, col4, col5 = st.columns(5, gap='small')
 
@@ -196,15 +197,16 @@ def generateInsertMySQL():
         st.button('Reset', on_click=reset, key="reset")
 
     input_column_address = st.text_input("Enter the address of the value column sequentially (separated by comma, ex: A, B, C) ")
-    sheet_name = st.text_input("Sheet name ")
     range_rows = st.number_input("Range rows until ", 0)
-    excel_uploader = st.file_uploader("Upload Excel Source", 'xlsx')
-    first_row_header = st.checkbox("First Row is Header")
 
     # process for input address of the value column in list variable
     input_column_address = input_column_address.upper()
     input_column_address = input_column_address.replace(" ", "")
     column_address_list = input_column_address.split(",")
+    excel_uploader = st.file_uploader("Upload Excel Source", 'xlsx')
+    if excel_uploader:
+        options_sheet = xl.readxl(excel_uploader).ws_names
+        sheet_name = st.selectbox("Sheet name",options_sheet)
 
     # process for input attribute name in list variable
     input_atribute_name = input_atribute_name.replace(" ", "")
@@ -304,7 +306,6 @@ def generateInsertMySQL():
 def select_box_feature():
     options = ("Main","Create Table", "Insert My SQL")
     selected_feature = st.selectbox("Select an existing feature",options)
-
     match options.index(selected_feature):
         case 0:
             st.write("No features selected yet")
@@ -317,7 +318,6 @@ def select_box_feature():
 
         case _:
             print("")
-
 
 def main():
     select_box_feature()
