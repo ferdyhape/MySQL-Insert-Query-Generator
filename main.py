@@ -303,6 +303,27 @@ def generateInsertMySQL():
                 INSERT INTO {table_name} ({name_for_query}) \nVALUES \n{final_query};
                 """)
 
+def createTable():
+    title = "[Create Table] Generator"
+    title_template(title)
+    
+    attribute_name_list = []
+    attribute_datatype_list = []
+    table_name = st.text_input("Table Name: ")
+    sum_of_attribute = st.number_input("Sum Of Attribute: ", 1)
+
+    for i in range(1, sum_of_attribute+1):
+        dump_attribute_name = st.text_input(f"Attribute {i}: ", key=f"name_input_{i}")
+        attribute_name_list.append(dump_attribute_name)
+        if dump_attribute_name != "":
+            attribute_datatype_list.append(st.selectbox(f'Datatype for **[{dump_attribute_name}]**', ('Char', 'Varchar', 'Integer'), key=f"datatype_input_{i}"))
+            
+    result = st.button("Check")
+    if result:
+        st.write(attribute_name_list)
+        st.write(attribute_datatype_list)
+        
+
 def select_box_feature():
     options = ("Main","Create Table", "Insert My SQL")
     selected_feature = st.selectbox("Select an existing feature",options)
@@ -311,7 +332,7 @@ def select_box_feature():
             st.write("No features selected yet")
 
         case 1:
-            st.write("On Progress")
+            createTable()
 
         case 2:
             generateInsertMySQL()
